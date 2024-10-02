@@ -9,14 +9,13 @@
  */
 const defaultExcluded = ["README", "Note", "TODO"]
 const defaultSortFunction = (page) => page.file.name
-const excluded = this.input ? this.input.exclude : defaultExcluded 
-const sortFunction = this.input ? this.input.sort : defaultSortFunction
+const excluded = typeof input?.exclude === "object" ? input.exclude : defaultExcluded 
+const sortFunction = typeof input?.sort === "function" ? input.sort : defaultSortFunction
 const pages = dv.pages()
 .filter(page=>!(excluded.includes(page.file.name) || page.file.path === dv.current().file.path))
 .sort(sortFunction)
 
 const markdown = await Promise.all(pages.map(async page=>{
-	console.log(page.file.sequence)
 	const filename = page.file.name
 	const link = page.file.link
 	const contents = await dv.io.load(page.file.path)
